@@ -2,8 +2,9 @@ import tcod
 from actions import EscapeAction, MovementAction
 from entity import Entity
 from engine import Engine
-from input_handlers import EventHandler
 from procgen import generate_dungeon
+from input_handlers import EventHandler
+
 
 def main() -> None:
     screen_width = 80

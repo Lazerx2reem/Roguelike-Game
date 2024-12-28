@@ -17,4 +17,7 @@ class GameMap:
         return 0 <= x < self.width and 0 <= y < self.height
 
     def render(self, console: Console) -> None:
-        console.tiles_rgb[0:self.width, 0:self.height] = self.tiles["dark"]
+        console.tiles_rgb[0:self.width, 0:self.height] = np.select(
+           condlist=[self.visible, self.explored],
+           choicelist=[self.tiles["light"], self.tiles["dark"]],
+           default=tile_types.SHROUD)

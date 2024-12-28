@@ -12,9 +12,10 @@ def main() -> None:
     map_width = 80
     map_height = 45
     
-    player_x = int(screen_width/2)
-    player_y = int(screen_height/2)
-
+    room_max_size = 10
+    room_min_size = 6
+    max_rooms = 30
+    
     tileset = tcod.tileset.load_tilesheet(
         "Image_File.png", 32, 8, tcod.tileset.CHARMAP_TCOD
     )

@@ -1,6 +1,7 @@
+import copy
 import tcod
 from actions import EscapeAction, MovementAction
-from entity import Entity
+import entity_factories
 from engine import Engine
 from procgen import generate_dungeon
 from input_handlers import EventHandler
@@ -25,7 +26,7 @@ def main() -> None:
 
     event_handler = EventHandler()
 
-    player = Entity(int(screen_width/2), int(screen_height/2), "@", (255,255,255))
+    player = copy.deepcopy(entity_factories.player)
 
     game_map = generate_dungeon(
         max_rooms=max_rooms,

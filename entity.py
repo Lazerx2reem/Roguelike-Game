@@ -7,7 +7,8 @@ from typing import Tuple, TypeVar, TYPE_CHECKING
 if TYPE_CHECKING:
    from game_map import GameMap
 
-+T = TypeVar("T", bound="Entity")
+T = TypeVar("T", bound="Entity")
+
 class Entity:
     def __init__(
        self,
@@ -25,7 +26,7 @@ class Entity:
         self.name = name
         self.blocks_movement = blocks_movement
     
-    def spawn(self: T, gamemap: GameMap, x: int, y: int) -> T:
+    def spawn(self: T, gamemap: GameMap, x: int, y: int)->T:
         """Spawn a copy of this instance at the given location."""
         clone = copy.deepcopy(self)
         clone.x = x

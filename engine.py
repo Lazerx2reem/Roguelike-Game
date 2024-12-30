@@ -14,6 +14,11 @@ class Engine:
         self.game_map = game_map
         self.player = player
         self.update_fov()
+
+    def handle_enemy_turns(self) -> None:
+        for entity in self.game_map.entities - {self.player}:
+            print(f'The {entity.name} wonders when it will get to take a real turn.')
+
     
     def handle_events(self, events: Iterable[Any]) -> None:
         for event in events:
@@ -23,6 +28,7 @@ class Engine:
                 continue
             
             action.perform(self, self.player)
+            self.handle_enemy_turns()
 
             self.update_fov()  # Update the FOV before the players next action.
     

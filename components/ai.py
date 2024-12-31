@@ -1,3 +1,4 @@
+
 from __future__ import annotations
 
 from typing import List, Tuple, TYPE_CHECKING
@@ -11,8 +12,10 @@ from components.base_component import BaseComponent
 if TYPE_CHECKING:
     from entity import Actor
 
+
 class BaseAI(Action, BaseComponent):
     entity: Actor
+
     def perform(self) -> None:
         raise NotImplementedError()
 

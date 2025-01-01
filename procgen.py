@@ -188,8 +188,4 @@ def generate_dungeon(
 
     # Optionally, could place additional features here
 
-<<<<<<< HEAD
     return dungeon
-=======
-    return dungeon
->>>>>>> c67885e (Updated procgen and rendering)

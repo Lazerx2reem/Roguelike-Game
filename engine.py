@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from typing import TYPE_CHECKING
-from render_functions import render_bar
+from render_functions import render_bar, render_names_at_mouse_location
 from tcod.console import Console
 from tcod.map import compute_fov
 from message_log import MessageLog
@@ -47,3 +47,5 @@ class Engine:
             maximum_value=self.player.fighter.max_hp,
             total_width=20,
         )
+        
+        render_names_at_mouse_location(console=console, x=21, y=44, engine=self)

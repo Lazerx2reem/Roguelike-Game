@@ -75,6 +75,7 @@ def place_entities(
     room: RectangularRoom,
     dungeon: GameMap,
     maximum_monsters: int,
+    maximum_items: int,
     monster_chance: float = 0.8,
 ) -> None:
     """
@@ -86,6 +87,7 @@ def place_entities(
     :param monster_chance: Probability that a spawned monster is one kind vs. another.
     """
     number_of_monsters = random.randint(0, maximum_monsters)
+    number_of_items = random.randint(0, maximum_items)
 
     for _ in range(number_of_monsters):
         x = random.randint(room.x1 + 1, room.x2 - 1)
@@ -98,6 +100,14 @@ def place_entities(
                 entity_factories.orc.spawn(dungeon, x, y)
             else:
                 entity_factories.troll.spawn(dungeon, x, y)
+    
+    for i in range(number_of_items):
+        x = random.randint(room.x1 + 1, room.x2 - 1)
+        y = random.randint(room.y1 + 1, room.y2 - 1)
+
+        if not any(entity.x == x and entity.y == y for entity in dungeon.entities):
+            entity_factories.health_potion.spawn(dungeon, x, y)
+
 
 
 def tunnel_between(start: Tuple[int, int], end: Tuple[int, int]) -> Iterator[Tuple[int, int]]:
@@ -136,6 +146,7 @@ def generate_dungeon(
     map_width: int,
     map_height: int,
     max_monsters_per_room: int,
+    max_items_per_room: int,
     engine: Engine,
     *,
     random_tunnel: bool = True,
@@ -183,7 +194,7 @@ def generate_dungeon(
                 dungeon.tiles[x_cur, y_cur] = tile_types.floor
 
         # Spawn some monsters
-        place_entities(new_room, dungeon, max_monsters_per_room)
+        place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room)
         rooms.append(new_room)
 
     # Optionally, could place additional features here

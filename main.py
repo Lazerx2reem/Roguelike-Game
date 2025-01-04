@@ -1,6 +1,6 @@
 import copy
 import tcod
-from actions import EscapeAction, MovementAction
+from actions import MovementAction
 import entity_factories
 from engine import Engine
 from procgen import generate_dungeon

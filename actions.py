@@ -1,11 +1,14 @@
 from __future__ import annotations
 
 from typing import Optional, Tuple, TYPE_CHECKING
+
+import color
 import exceptions
+
 if TYPE_CHECKING:
     from engine import Engine
     from entity import Actor, Entity, Item
-import color
+
 
 class Action:
     def __init__(self, entity: Actor) -> None:
@@ -27,6 +30,7 @@ class Action:
         This method must be overridden by Action subclasses.
         """
         raise NotImplementedError()
+
 
 class PickupAction(Action):
     """Pickup an item and add it to the inventory, if there is room for it."""
@@ -73,9 +77,11 @@ class ItemAction(Action):
         """Invoke the items ability, this action will be given to provide context."""
         self.item.consumable.activate(self)
 
+
 class DropItem(ItemAction):
     def perform(self) -> None:
         self.entity.inventory.drop(self.item)
+
 
 class WaitAction(Action):
     def perform(self) -> None:
@@ -117,7 +123,6 @@ class MeleeAction(ActionWithDirection):
         damage = self.entity.fighter.power - target.fighter.defense
 
         attack_desc = f"{self.entity.name.capitalize()} attacks {target.name}"
-
         if self.entity is self.engine.player:
             attack_color = color.player_atk
         else:
@@ -139,10 +144,13 @@ class MovementAction(ActionWithDirection):
         dest_x, dest_y = self.dest_xy
 
         if not self.engine.game_map.in_bounds(dest_x, dest_y):
+            # Destination is out of bounds.
             raise exceptions.Impossible("That way is blocked.")
         if not self.engine.game_map.tiles["walkable"][dest_x, dest_y]:
+            # Destination is blocked by a tile.
             raise exceptions.Impossible("That way is blocked.")
         if self.engine.game_map.get_blocking_entity_at_location(dest_x, dest_y):
+            # Destination is blocked by an entity.
             raise exceptions.Impossible("That way is blocked.")
 
         self.entity.move(self.dx, self.dy)

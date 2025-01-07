@@ -157,55 +157,49 @@ def generate_dungeon(
     max_monsters_per_room: int,
     max_items_per_room: int,
     engine: Engine,
-    *,
-    random_tunnel: bool = True,
 ) -> GameMap:
-    """
-    Generate a brand-new, randomized dungeon map.
-
-    :param max_rooms: The max number of rooms to attempt to place.
-    :param room_min_size: The smallest possible room dimension.
-    :param room_max_size: The largest possible room dimension.
-    :param map_width: The total width of the dungeon map in tiles.
-    :param map_height: The total height of the dungeon map in tiles.
-    :param max_monsters_per_room: The maximum number of monsters to spawn in each room.
-    :param engine: The engine, providing global context (player actor, etc).
-    :param random_tunnel: If True, picks the corridor path direction randomly. Otherwise could do a single corridor style.
-    :return: The fully built GameMap instance, with rooms/corridors/monsters placed.
-    """
+    """Generate a new dungeon map."""
     player = engine.player
     dungeon = GameMap(engine, map_width, map_height, entities=[player])
 
     rooms: List[RectangularRoom] = []
 
-    for _ in range(max_rooms):
+    center_of_last_room = (0, 0)
+
+    for r in range(max_rooms):
         room_width = random.randint(room_min_size, room_max_size)
         room_height = random.randint(room_min_size, room_max_size)
 
         x = random.randint(0, dungeon.width - room_width - 1)
         y = random.randint(0, dungeon.height - room_height - 1)
 
+        # "RectangularRoom" class makes rectangles easier to work with
         new_room = RectangularRoom(x, y, room_width, room_height)
 
-        # check for collisions with existing rooms
+        # Run through the other rooms and see if they intersect with this one.
         if any(new_room.intersects(other_room) for other_room in rooms):
-            continue  # skip if intersecting
+            continue  # This room intersects, so go to the next attempt.
+        # If there are no intersections then the room is valid.
 
-        # Carve out the floor for the new room
+        # Dig out this rooms inner area.
         dungeon.tiles[new_room.inner] = tile_types.floor
 
-        if not rooms:
-            # This is the first room, place the player here
+        if len(rooms) == 0:
+            # The first room, where the player starts.
             player.place(*new_room.center, dungeon)
-        else:
-            # Connect the last room to this one with corridors
-            for x_cur, y_cur in tunnel_between(rooms[-1].center, new_room.center):
-                dungeon.tiles[x_cur, y_cur] = tile_types.floor
+        else:  # All rooms after the first.
+            # Dig out a tunnel between this room and the previous one.
+            for x, y in tunnel_between(rooms[-1].center, new_room.center):
+                dungeon.tiles[x, y] = tile_types.floor
 
-        # Spawn some monsters
+            center_of_last_room = new_room.center
+
         place_entities(new_room, dungeon, max_monsters_per_room, max_items_per_room)
-        rooms.append(new_room)
 
-    # Optionally, could place additional features here
+        dungeon.tiles[center_of_last_room] = tile_types.down_stairs
+        dungeon.downstairs_location = center_of_last_room
+
+        # Finally, append the new room to the list.
+        rooms.append(new_room)
 
     return dungeon

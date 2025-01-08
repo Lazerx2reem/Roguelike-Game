@@ -12,6 +12,16 @@ import tile_types
 if TYPE_CHECKING:
     from engine import Engine
 
+max_items_by_floor = [
+    (1, 1),
+    (4, 2),
+ ]
+
+max_monsters_by_floor = [
+    (1, 2),
+    (4, 3),
+    (6, 5),
+]
 
 class RectangularRoom:
     """

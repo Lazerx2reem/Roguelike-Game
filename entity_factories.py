@@ -1,9 +1,9 @@
 from components.ai import HostileEnemy
-from components import consumable
 from components.fighter import Fighter
 from components.inventory import Inventory
 from entity import Actor, Item
 from components.level import Level
+from components import consumable, equippable
 
 player = Actor(
     char="@",
@@ -57,3 +57,12 @@ lightning_scroll = Item(
     color=(255, 255, 0),
     name="Lightning Scroll",
     consumable=consumable.LightningDamageConsumable(damage=20, maximum_range=5),)
+
+
+dagger = Item(char="/", color=(0, 191, 255), name="Dagger", equippable=equippable.Dagger())
+ 
+sword = Item(char="/", color=(0, 191, 255), name="Sword", equippable=equippable.Sword())
+
+leather_armor = Item(char="[",color=(139, 69, 19),name="Leather Armor",equippable=equippable.LeatherArmor(),)
+
+chain_mail = Item(char="[", color=(139, 69, 19), name="Chain Mail", equippable=equippable.ChainMail())

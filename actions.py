@@ -83,6 +83,15 @@ class DropItem(ItemAction):
     def perform(self) -> None:
         self.entity.inventory.drop(self.item)
 
+class EquipAction(Action):
+    def __init__(self, entity: Actor, item: Item):
+        super().__init__(entity)
+
+        self.item = item
+
+    def perform(self) -> None:
+        self.entity.equipment.toggle_equip(self.item)
+
 
 class WaitAction(Action):
     def perform(self) -> None:

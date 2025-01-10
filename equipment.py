@@ -71,3 +71,17 @@ class Equipment(BaseComponent):
             self.unequip_message(current_item.name)
 
         setattr(self, slot, None)
+    
+    def toggle_equip(self, equippable_item: Item, add_message: bool = True) -> None:
+        if (
+            equippable_item.equippable
+            and equippable_item.equippable.equipment_type == EquipmentType.WEAPON
+        ):
+            slot = "weapon"
+        else:
+            slot = "armor"
+
+        if getattr(self, slot) == equippable_item:
+            self.unequip_from_slot(slot, add_message)
+        else:
+            self.equip_to_slot(slot, equippable_item, add_message)

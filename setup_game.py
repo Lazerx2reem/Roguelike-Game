@@ -87,7 +87,7 @@ class MainMenu(input_handlers.BaseEventHandler):
         console.print(
             console.width // 2,
             console.height - 2,
-            "By (Arsh Guupta)",
+            "By Arsh Gupta",
             fg=color.menu_title,
             alignment=tcod.CENTER,
         )
